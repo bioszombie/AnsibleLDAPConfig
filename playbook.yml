@@ -1,0 +1,227 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+  tasks:
+  
+  - name: Update apt repo and cache on all Debian/Ubuntu boxes
+    apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+  - name: Upgrade all packages on servers
+    apt: upgrade=dist force_apt_get=yes
+
+  - name: Check if a reboot is needed on all servers
+    register: reboot_required_file
+    stat: path=/var/run/reboot-required get_md5=no
+
+  - name: Reboot the box if kernel updated
+    reboot:
+     msg: "Reboot initiated by Ansible for kernel updates"
+     connect_timeout: 5
+     reboot_timeout: 350        
+     pre_reboot_delay: 0
+     post_reboot_delay: 30
+     test_command: uptime
+    when: reboot_required_file.stat.exists
+
+  - name: Ensure libnss-ldapd package is installed (Debian).
+    apt:
+     name:
+      - libnss-ldapd
+      - sssd 
+      - libpam-sss 
+      - libnss-sss 
+      - sssd-tools 
+      - libsss-sudo
+     state: present
+     autoclean: yes
+
+  - name: Copy custom nslcd.conf
+    copy:
+     src: ./template/etc/nslcd.conf
+     dest: /etc/nslcd.conf
+     owner: root
+     group: nslcd
+     mode: 0640
+
+  - name: Copy custom nsswitch.conf
+    copy:
+     src: ./template/etc/nsswitch.conf
+     dest: /etc/nsswitch.conf
+     owner: root
+     group: root
+     mode: 0644
+
+  - name: Copy custom ldap ldap.conf
+    copy:
+     src: ./template/etc/ldap/ldap.conf
+     dest: /etc/ldap/ldap.conf
+     owner: root
+     group: root
+     mode: 0644
+
+  - name: Copy custom ssh-getkey-ldap.sh
+    copy:
+     src: ./template/etc/ldap/ssh-getkey-ldap.sh
+     dest: /etc/ldap/ssh-getkey-ldap.sh
+     owner: root
+     group: root
+     mode: 0755     
+
+  - name: Copy custom sssd.conf
+    copy:
+     src: ./template/etc/sssd/sssd.conf
+     dest: /etc/sssd/sssd.conf
+     owner: root
+     group: root
+     mode: 0600
+
+  - name: Copy custom sshd_config
+    copy:
+     src: ./template/etc/ssh/sshd_config
+     dest: /etc/ssh/sshd_config
+     owner: root
+     group: root
+     mode: 0644
+
+  - name: Create /etc/netgroup if it does not exist
+    copy:
+      content: "" 
+      dest: /etc/netgroup
+      force: false
+      group: root
+      owner: root
+      mode: 0644
+
+  - name: Create /etc/ssl/certs/ if it does not exist
+    ansible.builtin.file:
+      path: /etc/ssl/certs/
+      state: directory
+      mode: 0755
+
+  - name: Copy custom ldap cert
+    copy:
+     src: ./template/etc/ssl/certs/custom_certificate.pem
+     dest: /etc/ssl/certs/custom_certificate.pem
+     owner: root
+     group: root
+     mode: 0644
+
+  - replace:
+      path: /etc/ldap/ldap.conf
+      regexp: 'ldap_base_name'
+      replace: "{{ ldap_base_name }}"
+      backup: yes
+
+  - replace:
+      path: /etc/ldap/ldap.conf
+      regexp: 'uri_server_name'
+      replace: "{{ uri_server_name }}"
+      backup: yes
+
+  - replace:
+      path: /etc/ldap/ssh-getkey-ldap.sh
+      regexp: 'bind_user_name_password'
+      replace: "{{ bind_user_name_password }}"
+      backup: yes
+
+  - replace:
+      path: /etc/ldap/ssh-getkey-ldap.sh
+      regexp: 'bind_user_name'
+      replace: "{{ bind_user_name }}"
+      backup: yes
+
+  - replace:
+      path: /etc/sssd/sssd.conf
+      regexp: 'bind_user_name_password'
+      replace: "{{ bind_user_name_password }}"
+      backup: yes
+
+  - replace:
+      path: /etc/sssd/sssd.conf
+      regexp: 'bind_user_name'
+      replace: "{{ bind_user_name }}"
+      backup: yes
+
+  - replace:
+      path: /etc/sssd/sssd.conf
+      regexp: 'ldap_base_name'
+      replace: "{{ ldap_base_name }}"
+      backup: yes
+
+  - replace:
+      path: /etc/sssd/sssd.conf
+      regexp: 'uri_server_name'
+      replace: "{{ uri_server_name }}"
+      backup: yes
+
+  - replace:
+      path: /etc/sssd/sssd.conf
+      regexp: 'domain_name'
+      replace: "{{ domain_name }}"
+      backup: yes
+
+  - replace:
+      path: /etc/nslcd.conf
+      regexp: 'ldap_base_name'
+      replace: "{{ ldap_base_name }}"
+      backup: yes
+
+  - replace:
+      path: /etc/nslcd.conf
+      regexp: 'uri_server_name'
+      replace: "{{ uri_server_name }}"
+      backup: yes
+
+  - replace:
+      path: /etc/nslcd.conf
+      regexp: 'bind_user_name_password'
+      replace: "{{ bind_user_name_password }}"
+      backup: yes
+
+  - replace:
+      path: /etc/nslcd.conf
+      regexp: 'bind_user_name'
+      replace: "{{ bind_user_name }}"
+      backup: yes
+
+  - replace:
+      path: /etc/nslcd.conf
+      regexp: 'bind_gid'
+      replace: "{{ bind_gid }}"
+      backup: yes
+
+  - replace:
+      path: /etc/nslcd.conf
+      regexp: 'bind_group_name'
+      replace: "{{ bind_group_name }}"
+      backup: yes
+
+  - replace:
+      path: /etc/ldap/ssh-getkey-ldap.sh
+      regexp: 'bind_group_name'
+      replace: "{{ bind_group_name }}"
+      backup: yes
+
+  - ini_file:
+      path: /etc/nslcd.conf
+      section: REMOVEME
+      state: absent
+
+  - name: restart nscd
+    service: "name=nscd state=restarted"
+
+  - name: restart sssd
+    service: "name=sssd state=restarted"
+
+  - name: restart nslcd
+    service: "name=nslcd state=restarted"
+
+  - name: Ensure nslcd is running and set to start on boot.
+    service: "name=nslcd state=started enabled=yes"
+
+  - name: Ensure nscd is running and set to start on boot.
+    service: "name=nscd state=started enabled=yes"
+
+  - name: Ensure sssd is running and set to start on boot.
+    service: "name=sssd state=started enabled=yes"
