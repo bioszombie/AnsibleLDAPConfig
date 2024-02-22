@@ -1,7 +1,4 @@
-ldap_base_name: dc=ldap,dc=REPLACE_ME,dc=REPLACE_ME
 bind_user_name: cn=REPLACE_ME,ou=users,dc=ldap,dc=REPLACE_ME,dc=REPLACE_ME
-bind_user_name_password: PASSWORDHERE
-bind_gid: BIND_GUID
-bind_group_name: GROUP_NAME
-uri_server_name: REPLACE_ME
-domain_name: REPLACE_ME
+bind_user_name_password: REPLACE_ME
+bind_gid: REPLACE_ME
+bind_group_name: REPLACE_ME
