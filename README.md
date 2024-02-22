@@ -24,7 +24,7 @@ This playbook is designed to automate the process of updating Debian/Ubuntu syst
 
 1. **Prepare Inventory File**: Ensure your Ansible inventory file is up to date with the target machines listed under the appropriate groups.
 
-2. **Configure Variables**: Customize the variables in the playbook or in separate variable files (`files.yml`, `services.yml`, `host_vars/[server].yml`) as needed. Add as many server.yml fiels as you have hosts that require LDAP configured. This includes LDAP configuration details, server URIs, and any specific package versions.
+2. **Configure Variables**: Customize the variables in the playbook or in separate variable files (`files.yml`, `services.yml`, `host_vars/[server].yml`) as needed. Add as many server.yml files as you have hosts that require LDAP configured. This includes LDAP configuration details, server URIs, and any specific package versions.
 
 3. **Run the Playbook**:
    ```sh
