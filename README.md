@@ -14,16 +14,17 @@ This playbook is designed to automate the process of updating Debian/Ubuntu syst
 - Debian or Ubuntu-based target machines.
 - SSH access configured for Ansible on all target machines.
 - Required Ansible roles and collections installed (if any).
-- LDAP Server
+- LDAP Server / Container / Provider
 
 ### Preferred LDAP Server
 - Latest Authentik SSO and LDAP Provider/Application/Outpost configured
+   - Known to work with Authentik version 2023.10.x and above
 
 ## How to Run
 
 1. **Prepare Inventory File**: Ensure your Ansible inventory file is up to date with the target machines listed under the appropriate groups.
 
-2. **Configure Variables**: Customize the variables in the playbook or in separate variable files (`vars/`, `group_vars/`, `host_vars/`) as needed. This includes LDAP configuration details, server URIs, and any specific package versions.
+2. **Configure Variables**: Customize the variables in the playbook or in separate variable files (`files.yml`, `services.yml`, `host_vars/[server].yml`) as needed. Add as many server.yml fiels as you have hosts that require LDAP configured. This includes LDAP configuration details, server URIs, and any specific package versions.
 
 3. **Run the Playbook**:
    ```sh
