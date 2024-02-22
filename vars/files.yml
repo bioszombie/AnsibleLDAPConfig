@@ -1,0 +1,74 @@
+files:
+  - ldap_conf_config: ldap.conf
+    file_source_path: ./template/etc/ldap/ldap.conf
+    file_dest_path: /etc/ldap/ldap.conf
+    file_owner: root
+    file_group: root
+    file_permission: 644
+  - ldap_ssh_config: ssh-getkey-ldap.sh
+    file_source_path: ./template/etc/ldap/ssh-getkey-ldap.sh
+    file_dest_path: /etc/ldap/ssh-getkey-ldap.sh
+    file_owner: root
+    file_group: root
+    file_permission: 755
+  - ssh_config: sshd_config
+    file_source_path: ./template/etc/ssh/sshd_config
+    file_dest_path: /etc/ssh/sshd_config
+    file_owner: root
+    file_group: root
+    file_permission: 644
+  - sssd_config: sssd.conf
+    file_source_path: ./template/etc/sssd/sssd.conf
+    file_dest_path: /etc/sssd/sssd.conf
+    file_owner: root
+    file_group: root
+    file_permission: 600
+  - nslcd_config: nslcd.conf
+    file_source_path: ./template/etc/nslcd.conf
+    file_dest_path: /etc/nslcd.conf
+    file_owner: root
+    file_group: nslcd
+    file_permission: 640
+  - nsswitch_config: nsswitch.conf
+    file_source_path: ./template/etc/nsswitch.conf
+    file_dest_path: /etc/nsswitch.conf
+    file_owner: root
+    file_group: root
+    file_permission: 644
+  - self_signed_cert: custom_certificate.pem
+    file_source_path: ./template/usr/share/ca-certificates/custom_certificate.pem
+    file_dest_path: /usr/share/ca-certificates/custom_certificate.pem
+    file_owner: root
+    file_group: root
+    file_permission: 644
+  - nscd_config: nscd.conf
+    file_source_path: ./template/etc/nscd.conf
+    file_dest_path: /etc/nscd.conf
+    file_owner: root
+    file_group: root
+    file_permission: 644
+var_replacements:
+  - { file_dest_path: "/etc/ldap/ldap.conf", regexp: 'bind_user_name_password', value: "{{ bind_user_name_password }}" }
+  - { file_dest_path: "/etc/ldap/ldap.conf", regexp: 'bind_user_name', value: "{{ bind_user_name }}" }
+  - { file_dest_path: "/etc/ldap/ldap.conf", regexp: 'bind_gid', value: "{{ bind_gid }}" }
+  - { file_dest_path: "/etc/ldap/ldap.conf", regexp: 'bind_group_name', value: "{{ bind_group_name }}" }
+  - { file_dest_path: "/etc/ldap/ssh-getkey-ldap.sh", regexp: 'bind_user_name_password', value: "{{ bind_user_name_password }}" }
+  - { file_dest_path: "/etc/ldap/ssh-getkey-ldap.sh", regexp: 'bind_user_name', value: "{{ bind_user_name }}" }
+  - { file_dest_path: "/etc/ldap/ssh-getkey-ldap.sh", regexp: 'bind_gid', value: "{{ bind_gid }}" }
+  - { file_dest_path: "/etc/ldap/ssh-getkey-ldap.sh", regexp: 'bind_group_name', value: "{{ bind_group_name }}" }
+  - { file_dest_path: "/etc/ssh/sshd_config", regexp: 'bind_user_name_password', value: "{{ bind_user_name_password }}" }
+  - { file_dest_path: "/etc/ssh/sshd_config", regexp: 'bind_user_name', value: "{{ bind_user_name }}" }
+  - { file_dest_path: "/etc/ssh/sshd_config", regexp: 'bind_gid', value: "{{ bind_gid }}" }
+  - { file_dest_path: "/etc/ssh/sshd_config", regexp: 'bind_group_name', value: "{{ bind_group_name }}" }
+  - { file_dest_path: "/etc/sssd/sssd.conf", regexp: 'bind_user_name_password', value: "{{ bind_user_name_password }}" }
+  - { file_dest_path: "/etc/sssd/sssd.conf", regexp: 'bind_user_name', value: "{{ bind_user_name }}" }
+  - { file_dest_path: "/etc/sssd/sssd.conf", regexp: 'bind_gid', value: "{{ bind_gid }}" }
+  - { file_dest_path: "/etc/sssd/sssd.conf", regexp: 'bind_group_name', value: "{{ bind_group_name }}" }
+  - { file_dest_path: "/etc/nslcd.conf", regexp: 'bind_user_name_password', value: "{{ bind_user_name_password }}" }
+  - { file_dest_path: "/etc/nslcd.conf", regexp: 'bind_user_name', value: "{{ bind_user_name }}" }
+  - { file_dest_path: "/etc/nslcd.conf", regexp: 'bind_gid', value: "{{ bind_gid }}" }
+  - { file_dest_path: "/etc/nslcd.conf", regexp: 'bind_group_name', value: "{{ bind_group_name }}" }
+  - { file_dest_path: "/etc/nsswitch.conf", regexp: 'bind_user_name_password', value: "{{ bind_user_name_password }}" }
+  - { file_dest_path: "/etc/nsswitch.conf", regexp: 'bind_user_name', value: "{{ bind_user_name }}" }
+  - { file_dest_path: "/etc/nsswitch.conf", regexp: 'bind_gid', value: "{{ bind_gid }}" }
+  - { file_dest_path: "/etc/nsswitch.conf", regexp: 'bind_group_name', value: "{{ bind_group_name }}" }

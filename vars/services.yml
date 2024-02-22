@@ -1,0 +1,20 @@
+services:
+  - service_name: nscd
+    service_restarted_state: restarted
+    service_started_state: started
+    service_enabled: yes
+
+  - service_name: sssd
+    service_restarted_state: restarted
+    service_started_state: started
+    service_enabled: yes
+
+  - service_name: nslcd
+    service_restarted_state: restarted
+    service_started_state: started
+    service_enabled: yes
+
+  - service_name: ssh
+    service_restarted_state: restarted
+    service_started_state: started
+    service_enabled: yes
