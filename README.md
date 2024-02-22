@@ -27,7 +27,7 @@ This playbook is designed to automate the process of updating Debian/Ubuntu syst
 
 3. **Run the Playbook**:
    ```sh
-   ansible-playbook -i path/to/inventory playbook.yml
+   ansible-playbook -i ./hosts/hosts.ini playbook.yml
    ```
 
 4. **Check Execution Results**: Review the output of the playbook execution to ensure all tasks have completed successfully. Address any errors or warnings as necessary.
